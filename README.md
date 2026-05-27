@@ -60,11 +60,13 @@ Assets/Scripts/
 ├── MoveSystem.cs               # Movement system (Burst)
 ├── RotationSpeedAuthoring.cs   # Rotation component + authoring + baker
 ├── RotationSystem.cs           # Rotation system (Burst)
-├── UnitTagAuthoring.cs         # Tag component for unit identification
 ├── PlayerInputSystem.cs        # Mouse click handling
+
+Assets/Scripts/Spawn 100
 ├── SpawnerData.cs              # Spawner component data
 ├── SpawnerAuthoring.cs         # Spawner authoring + baker
 └── SpawnSystem.cs              # Spawn system (Burst)
+├── UnitTagAuthoring.cs         # Tag component for unit identification
 ```
 
 ---
@@ -121,15 +123,15 @@ Assets/Scripts/
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      TRADITIONAL OOP                         │
-│   GameObject → MonoBehaviour → Update() → scattered data     │
-│                     ❌ slow, ❌ cache misses                  │
+│                      TRADITIONAL OOP                        │
+│   GameObject → MonoBehaviour → Update() → scattered data    │
+│                     ❌ slow, ❌ cache misses               │
 └─────────────────────────────────────────────────────────────┘
                               ⬇
 ┌─────────────────────────────────────────────────────────────┐
-│                         ECS (DOTS)                           │
-│   Entity (ID) → Component (struct data) → System (logic)     │
-│              ✅ contiguous data, ✅ multithreading           │
+│                         ECS (DOTS)                          │
+│   Entity (ID) → Component (struct data) → System (logic)    │
+│              ✅ contiguous data, ✅ multithreading         │
 └─────────────────────────────────────────────────────────────┘
 ```
 
