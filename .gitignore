@@ -1,0 +1,27 @@
+# [Ll]ibrary/, [Tt]emp/, [Oo]bj/, [Bb]uild/, [Ll]ogs/, [Uu]ser[Ss]ettings/
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+.utmp/
+
+# IDE/Editor files
+.vs/
+.idea/
+.vscode/
+*.csproj
+*.sln
+*.user
+*.suo
+
+# Crash logs/OS files
+*.log
+.DS_Store
+
+# Build files
+*.apk
+*.aab
+*.unitypackage
