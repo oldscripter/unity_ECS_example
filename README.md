@@ -123,15 +123,15 @@ Assets/Scripts/Spawn 100
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      TRADITIONAL OOP                        │
-│   GameObject → MonoBehaviour → Update() → scattered data    │
-│                     ❌ slow, ❌ cache misses               │
+                      TRADITIONAL OOP
+   GameObject → MonoBehaviour → Update() → scattered data
+                     ❌ slow, ❌ cache misses
 └─────────────────────────────────────────────────────────────┘
                               ⬇
 ┌─────────────────────────────────────────────────────────────┐
-│                         ECS (DOTS)                          │
-│   Entity (ID) → Component (struct data) → System (logic)    │
-│              ✅ contiguous data, ✅ multithreading         │
+                         ECS
+   Entity (ID) → Component (struct data) → System (logic)
+              ✅ contiguous data, ✅ multithreading
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -186,12 +186,6 @@ public partial struct MoveSystem : ISystem
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
----
-
-## 📝 License
-
-Distributed under the **MIT** license. See `LICENSE` file for details.
 
 ---
 
