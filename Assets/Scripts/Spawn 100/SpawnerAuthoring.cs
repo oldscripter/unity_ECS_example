@@ -8,6 +8,9 @@ public class SpawnerAuthoring : MonoBehaviour
     public int UnitsToSpawn = 100;    // Количество юнитов
     public float Spacing = 1.5f;      // Расстояние между юнитами
     public float SpawnRate = 0.1f;    // Как быстро создавать
+
+    // 🔹 Публичное поле для доступа извне
+    public int SpawnedCount;
     
     public class Baker : Baker<SpawnerAuthoring>
     {
@@ -31,6 +34,8 @@ public class SpawnerAuthoring : MonoBehaviour
                 Spacing = authoring.Spacing,
                 GridSize = (int)math.sqrt(authoring.UnitsToSpawn)
             });
+
+            authoring.SpawnedCount++; // Увеличиваем счётчик
         }
     }
 }

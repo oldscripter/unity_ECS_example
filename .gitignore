@@ -17,6 +17,12 @@
 *.user
 *.suo
 
+# Meta files
+*.meta
+
+# Recovery
+/[Aa]ssets/_[Rr]ecovery/
+
 # Crash logs/OS files
 *.log
 .DS_Store

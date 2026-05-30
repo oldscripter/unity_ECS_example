@@ -149,9 +149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerAuthoring
   UnitPrefab: {fileID: 4640389545703949617, guid: 3ed69611a67e3834e882a590a9af658a, type: 3}
-  UnitsToSpawn: 500
-  Spacing: 0.75
-  SpawnRate: 0.02
+  UnitsToSpawn: 10000
+  Spacing: 0.5
+  SpawnRate: 0.0001
 --- !u!4 &771608380
 Transform:
   m_ObjectHideFlags: 0

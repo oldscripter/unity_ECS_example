@@ -170,12 +170,9 @@ public partial struct MoveSystem : ISystem
 
 | Number of units | FPS (tested) |
 |-----------------|--------------|
-| 100 | 120+ |
-| 500 | 90+ |
-| 1000 | 60+ |
-| 5000 | 30-40 |
+| 10 000 | 500+ |
 
-*Tested on Intel i7-10700, RTX 2060*
+*Tested on AMD Ryzen R7 7800x3d, RTX 5060 - 8GB (OC edition), 32GB RAM
 
 ---
 

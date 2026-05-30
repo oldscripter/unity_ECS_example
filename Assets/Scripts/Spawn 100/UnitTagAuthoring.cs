@@ -2,7 +2,7 @@ using Unity.Entities;
 using UnityEngine;
 
 // Пустой компонент-тег для идентификации юнитов
-public struct UnitTag : IComponentData { }
+public partial struct UnitTag : IComponentData { }
 
 public class UnitTagAuthoring : MonoBehaviour
 {

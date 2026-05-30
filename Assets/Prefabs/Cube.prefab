@@ -11,16 +11,14 @@ GameObject:
   - component: {fileID: 2468401440699392032}
   - component: {fileID: 6067710662686975561}
   - component: {fileID: 3967973287727842892}
+  - component: {fileID: 28157575503466076}
   - component: {fileID: 7436035729117054296}
-  - component: {fileID: 3754140548126056857}
-  - component: {fileID: 6407669739551443885}
-  - component: {fileID: 4074138357470706849}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!4 &2468401440699392032
 Transform:
@@ -93,6 +91,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &28157575503466076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4640389545703949617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4af0f8c38f593c44981e1d817d4fee34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitAuthoring
+  moveSpeed: 5
+  stoppingDistance: 0.5
+  rotationSpeed: 2
 --- !u!65 &7436035729117054296
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -114,42 +127,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3754140548126056857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4640389545703949617}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9321ffebe21e61438f0f31850fc0fc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RotationSpeedAuthoring
-  RadiansPerSecond: 2
---- !u!114 &6407669739551443885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4640389545703949617}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c208ebc1bb6046d42b5a8b24adaae5c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoveToAuthoring
-  MoveSpeed: 5
-  StoppingDistance: 0.5
---- !u!114 &4074138357470706849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4640389545703949617}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 805332d6a7096094b89bfe6e06c699d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UnitTagAuthoring

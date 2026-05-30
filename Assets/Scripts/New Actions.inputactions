@@ -1,6 +1,55 @@
 {
-    "version": 0,
+    "version": 1,
     "name": "New Actions",
-    "maps": [],
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "8c4ff5d7-9f80-4e28-a3c9-fcb4562962f8",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "7ebecb83-8d92-4e41-80ee-8e8b10682434",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "New action1",
+                    "type": "Button",
+                    "id": "0e9a65ac-6d8b-404d-80fb-a84bc678d35b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "906be06a-b4e2-46df-9047-2e582d5aaf47",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "22474a17-a359-498e-8446-10e2aef0e09f",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
     "controlSchemes": []
 }
