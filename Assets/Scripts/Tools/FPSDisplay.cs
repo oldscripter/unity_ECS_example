@@ -1,3 +1,5 @@
+// oldscripter@gmail.com
+
 using System.Text;
 using TMPro;
 using Unity.Profiling;
@@ -6,32 +8,29 @@ using UnityEngine;
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class PerformanceDisplay : MonoBehaviour
 {
-    [Header("Настройки FPS")]
-    [SerializeField] private float updateInterval = 0.5f; // Частота обновления
+    [Header("Settings for FPS")]
+    [SerializeField] private float updateInterval = 0.5f;
     
-    [Header("Цветовая индикация FPS")]
+    [Header("Coloring for FPS")]
     [SerializeField] private Color optimalColor = Color.green;   // >= 45 FPS
     [SerializeField] private Color warningColor = Color.yellow;  // 25-44 FPS
     [SerializeField] private Color criticalColor = Color.red;    // < 25 FPS
     
-    [Header("Показывать дополнительные метрики")]
+    [Header("Show additional metrics")]
     [SerializeField] private bool showDrawCalls = true;
     [SerializeField] private bool showSetPassCalls = true;
     [SerializeField] private bool showVertices = true;
     
-    // Переменные для FPS
     private TextMeshProUGUI _displayText;
     private int _framesCount;
     private float _framesTime;
     
-    // Profiler рекордеры для рендер-метрик
     private ProfilerRecorder _drawCallsRecorder;
     private ProfilerRecorder _setPassCallsRecorder;
     private ProfilerRecorder _verticesRecorder;
     
     private void OnEnable()
     {
-        // Запускаем сбор метрик рендеринга
         if (showDrawCalls)
             _drawCallsRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count");
         
@@ -44,7 +43,6 @@ public class PerformanceDisplay : MonoBehaviour
     
     private void OnDisable()
     {
-        // Останавливаем рекордеры, чтобы избежать утечек памяти
         if (showDrawCalls && _drawCallsRecorder.Valid)
             _drawCallsRecorder.Dispose();
         
@@ -62,7 +60,6 @@ public class PerformanceDisplay : MonoBehaviour
     
     private void Update()
     {
-        // --- FPS и MS (обновляются с интервалом) ---
         _framesCount++;
         _framesTime += Time.unscaledDeltaTime;
         
@@ -71,20 +68,18 @@ public class PerformanceDisplay : MonoBehaviour
             float fps = _framesCount / _framesTime;
             float ms = (_framesTime / _framesCount) * 1000f;
             
-            // Выбираем цвет для FPS
             Color fpsColor;
             if (fps >= 45) fpsColor = optimalColor;
             else if (fps >= 25) fpsColor = warningColor;
             else fpsColor = criticalColor;
             
-            // Собираем все метрики в одну строку
             var sb = new StringBuilder();
             
-            // FPS и MS (основная строка)
+            // FPS & MS
             sb.AppendLine($"<color=#{ColorToHex(fpsColor)}>FPS: {fps:0.}</color>");
             sb.AppendLine($"MS: {ms:0.0}");
             
-            // Рендер-метрики
+            // Metrics render
             if (showDrawCalls && _drawCallsRecorder.Valid)
                 sb.AppendLine($"Draw Calls: {_drawCallsRecorder.LastValue}");
             
@@ -96,13 +91,12 @@ public class PerformanceDisplay : MonoBehaviour
             
             _displayText.text = sb.ToString();
             
-            // Сброс для следующего интервала
+            // Timing reset
             _framesCount = 0;
             _framesTime = 0;
         }
     }
     
-    // Вспомогательная функция для конвертации Color в HEX (для использования в Rich Text)
     private string ColorToHex(Color color)
     {
         return $"{Mathf.RoundToInt(color.r * 255):X2}" +

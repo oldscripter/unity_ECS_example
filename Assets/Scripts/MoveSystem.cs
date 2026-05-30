@@ -1,3 +1,5 @@
+// oldsripter@gmail.com
+
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
@@ -13,28 +15,28 @@ public partial struct MoveSystem : ISystem
         foreach (var (transform, moveTo) in 
                  SystemAPI.Query<RefRW<LocalTransform>, RefRW<MoveTo>>())
         {
-            // Если не движется — пропускаем
+            // Skip if not moving
             if (!moveTo.ValueRO.IsMoving)
                 continue;
             
-            // Вычисляем направление к цели
+            // Calculate the direction
             float3 direction = moveTo.ValueRO.TargetPosition - transform.ValueRO.Position;
             float distance = math.length(direction);
             
-            // Проверяем, достигли ли цели
+            // Checj if we reach the target
             if (distance <= moveTo.ValueRO.StoppingDistance)
             {
-                // Останавливаемся
+                // Stopping
                 moveTo.ValueRW.IsMoving = false;
                 continue;
             }
             
-            // Двигаемся к цели
+            // Move to target
             direction = math.normalize(direction);
             float3 newPosition = transform.ValueRO.Position + 
                                   direction * moveTo.ValueRO.MoveSpeed * deltaTime;
             
-            // Обновляем позицию
+            // Update position
             transform.ValueRW.Position = newPosition;
         }
     }

@@ -1,41 +1,44 @@
+// oldscripter@gmail.com
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class SelectionBoxUI : MonoBehaviour
 {
+    public GameObject selectionBoxObject;
     public RectTransform selectionBox;
     
     private Vector2 startPosition;
+    private Vector2 endPosition;
     private bool isDragging;
-    private Mouse mouse;
+    
+    private static Vector2 _startPos;
+    private static Vector2 _endPos;
+    
+    public static Vector2 GetStartPosition() { return _startPos; }
+    public static Vector2 GetEndPosition() { return _endPos; }
     
     void Start()
     {
-        Debug.Log("Start");
+        selectionBox = selectionBoxObject.GetComponent<RectTransform>();
         if (selectionBox != null)
         {
             selectionBox.gameObject.SetActive(false);
         }
-        
-        // Получаем устройство мыши
-        mouse = Mouse.current;
+        _startPos = Vector2.zero;
+        _endPos = Vector2.zero;
     }
     
     void Update()
     {
-        // Если мышь не найдена, выходим
-        if (mouse == null) 
+        // Selection start
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Mouse not found");
-            return;
-        }
-        
-        // Начало выделения (левая кнопка мыши)
-        if (mouse.leftButton.wasPressedThisFrame)
-        {
-            Debug.Log("CLICK");
-            startPosition = mouse.position.ReadValue();
+            startPosition = Input.mousePosition;
+            endPosition = startPosition;
+            _startPos = startPosition;
+            _endPos = endPosition;
             isDragging = true;
             
             if (selectionBox != null)
@@ -44,21 +47,20 @@ public class SelectionBoxUI : MonoBehaviour
                 selectionBox.position = startPosition;
                 selectionBox.sizeDelta = Vector2.zero;
             }
-            
-            Debug.Log("Selection started at: " + startPosition);
         }
         
-        // Рисуем рамку
-        if (isDragging && mouse.leftButton.isPressed)
+        // Draw the rect
+        if (isDragging && Input.GetMouseButton(0))
         {
-            Debug.Log("DRAW");
+            endPosition = Input.mousePosition;
+            _endPos = endPosition;
+            
             if (selectionBox != null)
             {
-                Vector2 currentPosition = mouse.position.ReadValue();
-                Vector2 boxPosition = (startPosition + currentPosition) / 2;
+                Vector2 boxPosition = (startPosition + endPosition) / 2;
                 Vector2 boxSize = new Vector2(
-                    Mathf.Abs(startPosition.x - currentPosition.x),
-                    Mathf.Abs(startPosition.y - currentPosition.y)
+                    Mathf.Abs(startPosition.x - endPosition.x),
+                    Mathf.Abs(startPosition.y - endPosition.y)
                 );
                 
                 selectionBox.position = boxPosition;
@@ -66,18 +68,17 @@ public class SelectionBoxUI : MonoBehaviour
             }
         }
         
-        // Конец выделения
-        if (isDragging && mouse.leftButton.wasReleasedThisFrame)
+        // Selection end
+        if (isDragging && Input.GetMouseButtonUp(0))
         {
-            Debug.Log("FINISH");
+            endPosition = Input.mousePosition;
+            _endPos = endPosition;
             isDragging = false;
             
             if (selectionBox != null)
             {
                 selectionBox.gameObject.SetActive(false);
             }
-            
-            Debug.Log("Selection ended");
         }
     }
 }

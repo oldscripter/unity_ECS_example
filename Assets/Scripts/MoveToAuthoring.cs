@@ -1,17 +1,18 @@
+// oldsripter@gmail.com
+
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-// Данные движения для ECS
+// Data for ECS
 public struct MoveTo : IComponentData
 {
-    public float3 TargetPosition;   // Целевая позиция
-    public float MoveSpeed;         // Скорость движения
-    public float StoppingDistance;  // Дистанция остановки
-    public bool IsMoving;           // Движется ли сейчас
+    public float3 TargetPosition;   // Target position
+    public float MoveSpeed;         // Speed
+    public float StoppingDistance;  // Stop distance
+    public bool IsMoving;           // Is moving right now
 }
 
-// Авторинг для настройки в редакторе
 public class MoveToAuthoring : MonoBehaviour
 {
     public float MoveSpeed = 5f;

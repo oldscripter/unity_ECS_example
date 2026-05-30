@@ -1,7 +1,9 @@
+// oldscripter@gmail.com
+
 using Unity.Entities;
 using UnityEngine;
 
-// Пустой компонент-тег для идентификации юнитов
+// Empty component-tag for unit identification
 public partial struct UnitTag : IComponentData { }
 
 public class UnitTagAuthoring : MonoBehaviour

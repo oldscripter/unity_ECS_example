@@ -1,13 +1,12 @@
+// oldscripter@gmail.com
 using Unity.Entities;
 using UnityEngine;
 
-// Компонент для хранения состояния выделения
 public struct UnitSelection : IComponentData
 {
     public bool IsSelected;
 }
 
-// Авторинг для добавления компонента на юнитов
 public class UnitSelectionAuthoring : MonoBehaviour
 {
     public class Baker : Baker<UnitSelectionAuthoring>
