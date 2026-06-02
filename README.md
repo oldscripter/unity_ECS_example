@@ -28,7 +28,7 @@ The project is inspired by *Diplomacy is Not an Option* — an RTS where massive
 
 ### 🚧 Future plans
 
-- [ ] Rectangle selection for units
+- [x] Rectangle selection for units
 - [ ] Health indicators
 - [ ] Simple enemy AI
 - [ ] Combat system
