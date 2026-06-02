@@ -4,6 +4,8 @@ using Unity.Entities;
 using Unity.Rendering;
 using UnityEngine;
 using Unity.Mathematics;
+using Unity.Physics;
+using Unity.Physics.Authoring;
 
 public class UnitAuthoring : MonoBehaviour
 {
@@ -15,6 +17,10 @@ public class UnitAuthoring : MonoBehaviour
     public float rotationSpeed = 2f;
      public Color normalColor = Color.white;
     public Color selectedColor = Color.yellow;
+
+    [Header("Physics")]
+    public float radius = 1.4f;
+    public float mass = 1f;
     
     public class Baker : Baker<UnitAuthoring>
     {
@@ -46,6 +52,23 @@ public class UnitAuthoring : MonoBehaviour
                                    authoring.normalColor.b, authoring.normalColor.a)
             };
             AddComponent(entity, colorComponent);
+
+            AddComponent(entity, new PhysicsCollider
+            {
+                Value = Unity.Physics.SphereCollider.Create(
+                    new SphereGeometry { Center = float3.zero, Radius = authoring.radius },
+                    new CollisionFilter { BelongsTo = 1u << 0, CollidesWith = 1u << 0 }
+                )
+            });
+            
+            AddComponent(entity, new PhysicsMass
+            {
+                InverseMass = 1f / authoring.mass,
+                Transform = new RigidTransform(quaternion.identity, float3.zero)
+            });
+            
+            AddComponent(entity, new PhysicsVelocity { Linear = float3.zero, Angular = float3.zero });
+            AddComponent(entity, new PhysicsGravityFactor { Value = 0f });
         }
     }
 }

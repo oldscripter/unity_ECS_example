@@ -1,10 +1,11 @@
-// oldsripter@gmail.com
-
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
+using Unity.Physics;
+using UnityEngine;
 
+[BurstCompile]
 public partial struct MoveSystem : ISystem
 {
     [BurstCompile]
@@ -12,32 +13,28 @@ public partial struct MoveSystem : ISystem
     {
         float deltaTime = SystemAPI.Time.DeltaTime;
         
-        foreach (var (transform, moveTo) in 
-                 SystemAPI.Query<RefRW<LocalTransform>, RefRW<MoveTo>>())
+        foreach (var (transform, moveTo, velocity) in 
+                 SystemAPI.Query<RefRO<LocalTransform>, RefRW<MoveTo>, RefRW<PhysicsVelocity>>().WithAll<UnitTag>())
         {
-            // Skip if not moving
             if (!moveTo.ValueRO.IsMoving)
-                continue;
-            
-            // Calculate the direction
-            float3 direction = moveTo.ValueRO.TargetPosition - transform.ValueRO.Position;
-            float distance = math.length(direction);
-            
-            // Checj if we reach the target
-            if (distance <= moveTo.ValueRO.StoppingDistance)
             {
-                // Stopping
-                moveTo.ValueRW.IsMoving = false;
+                velocity.ValueRW.Linear = float3.zero;
                 continue;
             }
             
-            // Move to target
-            direction = math.normalize(direction);
-            float3 newPosition = transform.ValueRO.Position + 
-                                  direction * moveTo.ValueRO.MoveSpeed * deltaTime;
+            float3 direction = moveTo.ValueRO.TargetPosition - transform.ValueRO.Position;
+            float distance = math.length(direction);
             
-            // Update position
-            transform.ValueRW.Position = newPosition;
+            if (distance <= moveTo.ValueRO.StoppingDistance)
+            {
+                moveTo.ValueRW.IsMoving = false;
+                velocity.ValueRW.Linear = float3.zero;
+                continue;
+            }
+            
+            // Устанавливаем скорость (физика сама двигает юнита)
+            float3 moveDirection = math.normalize(direction);
+            velocity.ValueRW.Linear = moveDirection * moveTo.ValueRO.MoveSpeed;
         }
     }
 }

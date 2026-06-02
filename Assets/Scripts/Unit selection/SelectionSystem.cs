@@ -13,7 +13,7 @@ public partial class SelectionSystem : SystemBase
     protected override void OnCreate()
     {
         Enabled = true;
-        Debug.Log("Selection system is ready");Debug.Log("Selection system is ready");
+        Debug.Log("Selection system is ready");
     }
     
     protected override void OnUpdate()
