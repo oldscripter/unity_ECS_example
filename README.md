@@ -30,6 +30,8 @@ The project is inspired by *Diplomacy is Not an Option* — an RTS where massive
 
 - [x] Rectangle selection for units
 - [x] Unit colliders
+- [x] Unit basic formations
+- [ ] Unit advanced formations
 - [ ] Health indicators
 - [ ] Simple enemy AI
 - [ ] Combat system
