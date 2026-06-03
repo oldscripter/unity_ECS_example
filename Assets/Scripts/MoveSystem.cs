@@ -3,7 +3,6 @@ using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
 using Unity.Physics;
-using UnityEngine;
 
 [BurstCompile]
 public partial struct MoveSystem : ISystem
@@ -11,10 +10,8 @@ public partial struct MoveSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        float deltaTime = SystemAPI.Time.DeltaTime;
-        
         foreach (var (transform, moveTo, velocity) in 
-                 SystemAPI.Query<RefRO<LocalTransform>, RefRW<MoveTo>, RefRW<PhysicsVelocity>>().WithAll<UnitTag>())
+                 SystemAPI.Query<RefRW<LocalTransform>, RefRO<MoveTo>, RefRW<PhysicsVelocity>>())
         {
             if (!moveTo.ValueRO.IsMoving)
             {
@@ -27,12 +24,10 @@ public partial struct MoveSystem : ISystem
             
             if (distance <= moveTo.ValueRO.StoppingDistance)
             {
-                moveTo.ValueRW.IsMoving = false;
                 velocity.ValueRW.Linear = float3.zero;
                 continue;
             }
             
-            // Устанавливаем скорость (физика сама двигает юнита)
             float3 moveDirection = math.normalize(direction);
             velocity.ValueRW.Linear = moveDirection * moveTo.ValueRO.MoveSpeed;
         }

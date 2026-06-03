@@ -19,7 +19,7 @@ public class UnitAuthoring : MonoBehaviour
     public Color selectedColor = Color.yellow;
 
     [Header("Physics")]
-    public float radius = 1.4f;
+    public float radius = 0.5f;
     public float mass = 1f;
     
     public class Baker : Baker<UnitAuthoring>
@@ -35,12 +35,6 @@ public class UnitAuthoring : MonoBehaviour
                 MoveSpeed = authoring.moveSpeed,
                 StoppingDistance = authoring.stoppingDistance,
                 IsMoving = false
-            });
-            
-            // Rotation
-            AddComponent(entity, new RotationSpeed
-            {
-                RadiansPerSecond = authoring.rotationSpeed
             });
             
             AddComponent<UnitTag>(entity);

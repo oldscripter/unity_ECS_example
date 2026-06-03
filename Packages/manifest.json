@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.unity.ai.navigation": "2.0.9",
+    "com.unity.ai.navigation": "2.0.13",
     "com.unity.collab-proxy": "2.10.2",
     "com.unity.entities": "1.4.6",
     "com.unity.entities.graphics": "1.4.19",

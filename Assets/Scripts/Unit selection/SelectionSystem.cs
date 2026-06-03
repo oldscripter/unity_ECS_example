@@ -5,10 +5,19 @@ using Unity.Transforms;
 using Unity.Rendering;
 using Unity.Mathematics;
 using UnityEngine;
+using System.Collections.Generic;
+using ECS_Formation;
+using System;
 
 public partial class SelectionSystem : SystemBase
 {
     private Camera mainCamera;
+    private int nextFormationID = 1;
+    private float formationSpacing = 0.5f;
+    private int maxUnitsPerRow = 10;
+    
+    public float FormationSpacing => formationSpacing;
+    public int MaxUnitsPerRow => maxUnitsPerRow;
     
     protected override void OnCreate()
     {
@@ -23,10 +32,8 @@ public partial class SelectionSystem : SystemBase
             mainCamera = Camera.main;
             if (mainCamera == null)
             {
-                Debug.Log("MainCamera not found");
                 return;
             }
-            Debug.Log("MainCamera not found");
         }
         
         // Click processing
@@ -47,6 +54,12 @@ public partial class SelectionSystem : SystemBase
             }
         }
         
+        // Right click for movement with formation
+        if (Input.GetMouseButtonUp(1))
+        {
+            HandleRightClick();
+        }
+        
         ApplySelectionVisual();
     }
     
@@ -57,14 +70,149 @@ public partial class SelectionSystem : SystemBase
         return start != end;
     }
     
-    private void HandleSingleClick()
+    private void HandleRightClick()
     {
-        // Raycast from camera to mouse position
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            // Check if we click on unit
+            float3 clickPosition = new float3(hit.point.x, 0, hit.point.z);
+            
+            // Собираем выделенных юнитов
+            var selectedUnits = new List<Entity>();
+            var unitPositions = new List<float3>();
+            
+            Entities.ForEach((Entity entity, ref UnitSelection selection, in LocalTransform transform) =>
+            {
+                if (selection.IsSelected)
+                {
+                    selectedUnits.Add(entity);
+                    unitPositions.Add(transform.Position);
+                }
+            }).WithoutBurst().Run();
+            
+            if (selectedUnits.Count == 0) return;
+            
+            if (selectedUnits.Count == 1)
+            {
+                // Одиночный юнит - очищаем формацию и двигаем
+                ClearFormation(selectedUnits[0]);
+                
+                if (EntityManager.HasComponent<MoveTo>(selectedUnits[0]))
+                {
+                    var moveTo = EntityManager.GetComponentData<MoveTo>(selectedUnits[0]);
+                    moveTo.TargetPosition = clickPosition;
+                    moveTo.IsMoving = true;
+                    EntityManager.SetComponentData(selectedUnits[0], moveTo);
+                }
+            }
+            else
+            {
+                // Несколько юнитов - создаём формацию
+                CreateFormation(selectedUnits, unitPositions, clickPosition);
+            }
+        }
+    }
+    
+    private void CreateFormation(List<Entity> units, List<float3> currentPositions, float3 targetCenter)
+    {
+        int formationID = nextFormationID++;
+        int unitsCount = units.Count;
+        
+        // Определяем направление формации
+        float3 center = float3.zero;
+        foreach (var pos in currentPositions)
+        {
+            center += pos;
+        }
+        center /= unitsCount;
+        
+        float3 directionToTarget = center - targetCenter;
+        directionToTarget.y = 0;
+        float3 formationForward = math.normalizesafe(directionToTarget);
+        
+        if (math.length(formationForward) < 0.01f)
+        {
+            formationForward = new float3(1, 0, 0);
+        }
+        
+        // Создаём временные массивы для сортировки (вместо кортежей)
+        Entity[] sortedEntities = new Entity[units.Count];
+        float3[] sortedPositions = new float3[units.Count];
+        int[] indices = new int[units.Count];
+        
+        for (int i = 0; i < units.Count; i++)
+        {
+            indices[i] = i;
+        }
+        
+        // Сортируем индексы по позиции
+        System.Array.Sort(indices, (a, b) => 
+        {
+            int xCompare = currentPositions[b].x.CompareTo(currentPositions[a].x);
+            if (xCompare != 0) return xCompare;
+            return currentPositions[b].z.CompareTo(currentPositions[b].z);
+        });
+        
+        // Заполняем отсортированные массивы
+        for (int i = 0; i < units.Count; i++)
+        {
+            sortedEntities[i] = units[indices[i]];
+            sortedPositions[i] = currentPositions[indices[i]];
+        }
+        
+        // Добавляем компоненты формации каждому юниту
+        maxUnitsPerRow = (int)Math.Sqrt(sortedEntities.Length) * 2;
+        for (int i = 0; i < sortedEntities.Length; i++)
+        {
+            int row = i / maxUnitsPerRow;
+            int col = i % maxUnitsPerRow;
+            
+            var member = new FormationMember
+            {
+                FormationID = formationID,
+                RowIndex = row,
+                ColIndex = col
+            };
+            
+            // Добавляем или обновляем компонент FormationMember
+            if (!EntityManager.HasComponent<FormationMember>(sortedEntities[i]))
+            {
+                EntityManager.AddComponent(sortedEntities[i], typeof(FormationMember));
+            }
+            EntityManager.SetComponentData(sortedEntities[i], member);
+        }
+        
+        // Создаём группу формации
+        Entity groupEntity = EntityManager.CreateEntity();
+        EntityManager.AddComponentData(groupEntity, new FormationGroupData
+        {
+            FormationID = formationID,
+            TargetCenter = targetCenter,
+            FormationForward = formationForward,
+            MaxUnitsPerRow = maxUnitsPerRow,
+            Spacing = formationSpacing,
+            TotalUnits = unitsCount,
+            IsMoving = true
+        });
+        
+        Debug.Log($"Created formation with {unitsCount} units, ID: {formationID}");
+    }
+    
+    private void ClearFormation(Entity unit)
+    {
+        if (EntityManager.HasComponent<FormationMember>(unit))
+        {
+            EntityManager.RemoveComponent<FormationMember>(unit);
+        }
+    }
+    
+    private void HandleSingleClick()
+    {
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
             bool clickedOnUnit = false;
             Entity clickedEntity = Entity.Null;
             
@@ -73,7 +221,7 @@ public partial class SelectionSystem : SystemBase
                 if (!clickedOnUnit)
                 {
                     float distance = Vector3.Distance(transform.Position, hit.point);
-                    if (distance < 0.5f) // If click close to unit
+                    if (distance < 0.5f)
                     {
                         clickedOnUnit = true;
                         clickedEntity = entity;
@@ -83,21 +231,17 @@ public partial class SelectionSystem : SystemBase
             
             if (clickedOnUnit)
             {
-                // Клик по юниту
                 if (Input.GetKey(KeyCode.LeftControl))
                 {
-                    // Ctrl + click: add/remove selected
                     ToggleUnitSelection(clickedEntity);
                 }
                 else
                 {
-                    // Click on object: unit selection
                     SelectSingleUnit(clickedEntity);
                 }
             }
             else
             {
-                // Void click should remove all selections
                 if (!Input.GetKey(KeyCode.LeftControl))
                 {
                     ClearAllSelection();
@@ -106,7 +250,6 @@ public partial class SelectionSystem : SystemBase
         }
         else
         {
-            // Void click (not an object)
             if (!Input.GetKey(KeyCode.LeftControl))
             {
                 ClearAllSelection();
@@ -150,14 +293,12 @@ public partial class SelectionSystem : SystemBase
         
         if (!additive)
         {
-            // Without Ctrl: first of all we should remove all selections
             Entities.ForEach((ref UnitSelection selection) =>
             {
                 selection.IsSelected = false;
             }).WithoutBurst().Run();
         }
         
-        // Select units in rect
         Entities.ForEach((ref UnitSelection selection, in LocalTransform transform) =>
         {
             Vector2 screenPos = mainCamera.WorldToScreenPoint(transform.Position);
@@ -167,7 +308,6 @@ public partial class SelectionSystem : SystemBase
                 selection.IsSelected = true;
                 selectedCount++;
             }
-            // If additive == true, units out of the rect NOT deselected
         }).WithoutBurst().Run();
         
         if (selectedCount > 0)
@@ -176,13 +316,13 @@ public partial class SelectionSystem : SystemBase
     
     private void ApplySelectionVisual()
     {
-        // Scale change
+        // Изменение масштаба при выделении
         Entities.ForEach((ref LocalTransform transform, in UnitSelection selection) =>
         {
             transform.Scale = selection.IsSelected ? 1.2f : 1f;
         }).WithoutBurst().Run();
         
-        // Color change
+        // Изменение цвета при выделении
         Entities.ForEach((ref URPMaterialPropertyBaseColor color, in UnitSelection selection) =>
         {
             if (selection.IsSelected)
@@ -203,5 +343,16 @@ public partial class SelectionSystem : SystemBase
         float width = Mathf.Abs(start.x - end.x);
         float height = Mathf.Abs(start.y - end.y);
         return new Rect(x, y, width, height);
+    }
+    
+    // Публичные методы для изменения параметров формации
+    public void SetFormationSpacing(float spacing)
+    {
+        formationSpacing = Mathf.Max(0.5f, spacing);
+    }
+    
+    public void SetMaxUnitsPerRow(int maxUnits)
+    {
+        maxUnitsPerRow = Mathf.Max(1, maxUnits);
     }
 }
