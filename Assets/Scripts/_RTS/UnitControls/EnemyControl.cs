@@ -124,7 +124,7 @@ public class Enemy : MonoBehaviour
         else
         {
             // Если не умер - просто отбрасываем (включаем физику временно)
-            ApplyForceToRigidbody(hitDirection * force * 0.5f);
+            //ApplyForceToRigidbody(hitDirection * force * 0.5f);
         }
     }
 

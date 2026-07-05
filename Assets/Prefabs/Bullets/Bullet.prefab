@@ -155,12 +155,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletControl
   speed: 300
-  damage: 500
-  hitForce: 500
+  damage: 15
+  hitForce: 5
   lifeTime: 10
   penetrateEnemies: 1
   maxPenetrations: 5
-  bounceForce: 200
+  bounceForce: 300
   bloodEffect: {fileID: 1419687363012578568, guid: c16feb4f129e22b45ae27521b55d20a6, type: 3}
   hitEffect: {fileID: 8150182981822028385, guid: 8fba6e8c4be18ea4d8a0adc912f6bb38, type: 3}
   effectLifetime: 2

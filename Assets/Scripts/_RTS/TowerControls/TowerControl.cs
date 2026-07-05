@@ -74,10 +74,6 @@ public class TurretController : MonoBehaviour
 
     private void Start()
     {
-        // Блокируем курсор
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         // Устанавливаем начальный угол
         currentAngle = 0f;
         targetAngle = 0f;
@@ -523,43 +519,6 @@ public class TurretController : MonoBehaviour
                 center.z + radius * Mathf.Sin(angle2)
             );
             Gizmos.DrawLine(p5, p6);
-        }
-    }
-
-    private void OnApplicationFocus(bool hasFocus)
-    {
-        if (!hasFocus)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-    }
-
-    private void OnGUI()
-    {
-        if (Event.current.Equals(Event.KeyboardEvent("escape")))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-
-        if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
-        {
-            if (Cursor.lockState == CursorLockMode.None)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-        }
-
-        // Отображение информации об авторежиме
-        if (showDebugInfo && autoMode)
-        {
-            string targetInfo = currentTarget != null ? $"Цель: {currentTarget.name}" : "Цель не найдена";
-            GUI.Label(new Rect(10, 10, 300, 20), $"Режим: АВТОМАТИЧЕСКИЙ");
-            GUI.Label(new Rect(10, 30, 300, 20), targetInfo);
-            GUI.Label(new Rect(10, 50, 300, 20), $"Угол: {currentAngle:F1}°");
-            GUI.Label(new Rect(10, 70, 300, 20), $"Радиус: {detectionRange:F1}м");
         }
     }
 }

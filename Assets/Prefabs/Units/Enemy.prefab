@@ -177,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   speed: 7
   stoppingDistance: 1.5
-  health: 20
+  health: 40
   deathDelay: 5
   physicsDelay: 0.1
   ragdollForceMultiplier: 1
