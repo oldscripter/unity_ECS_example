@@ -318,7 +318,7 @@ MonoBehaviour:
   rotationSpeed: 5
   bulletPrefab: {fileID: 7650865828860629353, guid: 99b1234e131a0344bbe7e225baf55657, type: 3}
   bulletSpeed: 50
-  fireRate: 14
+  fireRate: 1
   bulletsPerShot: 1
   spreadAngle: 15
   bulletForce: 100

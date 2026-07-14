@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 9207617548956992420}
   - component: {fileID: 151342109299957930}
   - component: {fileID: 5098088565157815458}
+  - component: {fileID: 1196130269794688156}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -188,3 +189,17 @@ MonoBehaviour:
   deathEffect: {fileID: 0}
   deathSound: {fileID: 0}
   audioSource: {fileID: 0}
+--- !u!114 &1196130269794688156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2741035328205135767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9a5ba9763fcc404fa049ee6f30b80bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  moveSpeed: 5
+  stoppingDistance: 0.5

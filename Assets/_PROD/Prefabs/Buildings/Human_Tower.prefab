@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5768954864276545206}
   - component: {fileID: 7179862713165395999}
   m_Layer: 6
-  m_Name: Tower_0_1
+  m_Name: Human_Tower
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
